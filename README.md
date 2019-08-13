@@ -1,7 +1,7 @@
 # Puyo Drop
 
 ## Background and overview
-Puyo Drop is a game that is similar to tetris. Groups of colored blocks, or puyo will drop down from the top of the screen and fall until it hits the bottom of the screen, or another puyo. The player loses when any puyo touches the top of the screen.
+Puyo Drop is a game that is similar to tetris. Groups of colored blocks, or puyo will drop down from the top of the screen and fall until it hits the bottom of the screen, or another puyo. The player loses when any puyo touches the top of the screen of the third row from the left.
 
 ## Functionality and MVP Features
 - User can press the directional arrow keys to move the puyos left and right and also have it drop down quickly.
@@ -10,6 +10,7 @@ Puyo Drop is a game that is similar to tetris. Groups of colored blocks, or puyo
 - After puyos are removed the puyos that were on top of the removed puyos start falling
 
 ## Wireframes
+![Puyo Drop Wireframe](README_Assets/puyo-drop-wireframe.png)
 
 ## Architecture and Technologies
 - Vanilla Javascript for the game logic.
