@@ -1,6 +1,7 @@
 import './styles/reset.css';
 import './styles/global.scss';
 import './styles/board.scss';
+import './styles/puyo.scss';
 
 import Game from './javascripts/game';
 

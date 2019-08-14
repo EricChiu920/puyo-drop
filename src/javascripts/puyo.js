@@ -2,7 +2,7 @@ const PUYO = {
   height: 64,
   width: 66,
   redPuyoPosition: '-515px -2px',
-  greenPuyoPosition: '-515px -62px',
+  greenPuyoPosition: '-515px -64px',
   bluePuyoPosition: '-515px -132px',
   yellowPuyoPosition: '-515px -197px',
   puyoColor: ['red', 'green', 'blue', 'yellow'],
@@ -13,9 +13,9 @@ class Puyo {
     const puyo = document.createElement('div');
     const puyoSprite = this.getPuyoSprite();
 
-    puyo.classList.add('puyo');
+    puyo.classList.add('new-puyo');
 
-    puyo.setAttribute('style', `transform: translate(0px, 0px); background-position: ${puyoSprite};`);
+    puyo.setAttribute('style', `transform: translate(132px, 0px); background-position: ${puyoSprite};`);
     puyo.id = 'moving';
     // Hide puyo until in comes into view.
     // puyo.style.top = `-${PUYO.height}px`;
@@ -25,24 +25,38 @@ class Puyo {
     return puyo;
   }
 
-  movePuyoDown(interval = 2) {
-    this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY + interval}px)`;
-    this.currentY += interval;
+  movePuyoDown(interval, maxY = 720) {
+    if (this.isMoving()) {
+      let newY = this.currentY + interval;
+
+      if (newY > maxY) {
+        newY = maxY;
+        this.puyo.id = '';
+        return;
+      }
+
+      this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY + interval}px)`;
+      this.currentY += interval;
+    }
   }
 
-  movePuyoSide(interval, width) {
-    if (document.getElementById('moving')) {
+  movePuyoSide(interval, maxX = 400) {
+    if (this.isMoving()) {
       let newX = this.currentX + interval;
       if (newX < 0) {
-        newX = 2;
-      } else if (newX > width - PUYO.width) {
-        newX = width - PUYO.width - 2;
+        newX = 0;
+      } else if (newX > maxX - PUYO.width) {
+        newX = maxX - PUYO.width;
       }
 
       this.puyo.style.transform = `translate(${newX}px, ${this.currentY}px)`;
 
       this.currentX = newX;
     }
+  }
+
+  isMoving() {
+    return document.getElementById('moving');
   }
 
   randomPuyo() {

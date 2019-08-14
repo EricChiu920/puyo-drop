@@ -1,9 +1,9 @@
 import Puyo from './puyo';
 
 const BOARD = {
-  height: 720,
-  width: 400,
-  interval: 1.5,
+  height: 770,
+  width: 396,
+  interval: 8,
 };
 
 class Board {
@@ -12,42 +12,75 @@ class Board {
     this.puyo = new Puyo();
     this.puyoHeight = this.puyo.getPuyoHeight();
     this.animate = this.animate.bind(this);
+
+    this.allPuyos = [];
+    this.columns = [];
+
+    for (let i = 0; i < 6; i += 1) {
+      this.columns.push([]);
+    }
+  }
+
+  constructBoard() {
+    for (let i = 0; i < 6; i += 1) {
+      const col = document.createElement('div');
+      for (let j = 0; j < 12; j += 1) {
+        const div = document.createElement('div');
+        div.id = `col-${i + 1}-row-${j + 1}`;
+        div.classList.add('grid-box');
+        col.appendChild(div);
+      }
+
+      this.container.appendChild(col);
+    }
+  }
+
+  changePuyoColumn(newColumn) {
+    this.puyoColumn = newColumn;
   }
 
   dropPuyo() {
-    const newPuyo = this.puyo.createPuyo();
-    this.container.appendChild(newPuyo);
+    const puyo = new Puyo();
+    this.puyo = puyo;
+    this.allPuyos.push(puyo);
+    this.newPuyo = puyo.createPuyo();
+    this.puyoColumn = 2;
 
-    this.dropPuyo = setInterval(() => this.animate(newPuyo), 1000 / 60);
-    // this.animate(newPuyo);
+    this.container.appendChild(this.newPuyo);
+
+    this.animate();
   }
 
-  animate(newPuyo) {
-    const oldTop = this.puyo.getPuyoY();
-    const puyo = newPuyo;
+  animate() {
+    const moving = this.puyo.isMoving();
 
-    if (oldTop < BOARD.height - this.puyoHeight) {
-      this.puyo.movePuyoDown(BOARD.interval);
+    if (moving) {
+      this.eachPuyo((puyo) => {
+        const maxHeight = BOARD.height - (this.columns[this.puyoColumn].length + 1) * this.puyoHeight;
+        puyo.movePuyoDown(BOARD.interval, maxHeight);
+      });
+
+      requestAnimationFrame(this.animate);
     } else {
-      this.puyo.setPuyoY(BOARD.height - this.puyoHeight);
-      puyo.id = '';
-      clearInterval(this.dropPuyo);
+      this.columns[this.puyoColumn].push(this.puyo);
+      this.dropPuyo();
     }
-    // debugger
-    // if (oldTop < BOARD.height - this.puyoHeight) {
-    //   // window.requestAnimationFrame(() => this.puyo.movePuyoDown(BOARD.interval));
-    //   this.puyo.movePuyoDown(BOARD.interval);
-    //   this.dropPuyo = requestAnimationFrame(() => this.animate(newPuyo));
-    //   this.animate(puyo);
-    // } else {
-    //   this.puyo.setPuyoY(BOARD.height - this.puyoHeight);
-    //   puyo.id = '';
-    //   cancelAnimationFrame(this.dropPuyo);
-    // }
+  }
+
+  eachPuyo(callback) {
+    this.allPuyos.forEach(callback.bind(this));
   }
 
   getWidth() {
     return BOARD.width;
+  }
+
+  getHeight() {
+    return BOARD.height;
+  }
+
+  getInterval() {
+    return BOARD.interval;
   }
 }
 
