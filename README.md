@@ -37,3 +37,6 @@ Day 4:
 
 Day 5:
 - Add sprites
+
+### Sprites from 
+https://www.spriters-resource.com/wii/puyo20th/sheet/47990/

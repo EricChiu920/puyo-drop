@@ -1,0 +1,15 @@
+.puyo-drop {
+  /* height: 60px; */
+  /* width: 66px; */
+  height: 720px;
+  width: 400px;
+  background-color: skyblue;
+  position: relative;
+}
+
+.puyo {
+  height: 64px;
+  width: 66px;
+  position: absolute;
+  background-image: url('../../assets/puyo-spritesheet.png');
+}
