@@ -14,7 +14,6 @@ Puyo Drop is a game that is similar to tetris. Groups of colored blocks, or puyo
 
 ## Architecture and Technologies
 - Vanilla Javascript for the game logic.
-- Canvas to draw spirtes and the board.
 - Webpack to bundle all javascript files into one bigger javascript file that is more easily importable
 
 ## Implementation Timeline

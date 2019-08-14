@@ -56,12 +56,20 @@ class Board {
 
     if (moving) {
       this.eachPuyo((puyo) => {
-        const maxHeight = BOARD.height - (this.columns[this.puyoColumn].length + 1) * this.puyoHeight;
+        let maxHeight;
+        if (puyo.puyo.id === 'moving') {
+          maxHeight = BOARD.height - (this.columns[this.puyoColumn].length + 1) * this.puyoHeight;
+        } else {
+          debugger
+          const columnHeight = this.columns[Number(puyo.puyo.dataset.column)].length + 1;
+          maxHeight = BOARD.height - columnHeight * this.puyoHeight;
+        }
         puyo.movePuyoDown(BOARD.interval, maxHeight);
       });
 
       requestAnimationFrame(this.animate);
     } else {
+      this.puyo.puyo.dataset.column = this.puyoColumn;
       this.columns[this.puyoColumn].push(this.puyo);
       this.dropPuyo();
     }
