@@ -15,7 +15,7 @@ class Puyo {
 
     puyo.classList.add('puyo');
 
-    puyo.setAttribute('style', `top: 0px; background-position: ${puyoSprite};`);
+    puyo.setAttribute('style', `top: 0px; left: 0px; background-position: ${puyoSprite};`);
     puyo.id = 'moving';
     // Hide puyo until in comes into view.
     // puyo.style.top = `-${PUYO.height}px`;
@@ -31,10 +31,18 @@ class Puyo {
     this.currentY += interval;
   }
 
-  movePuyoSide(interval) {
+  movePuyoSide(interval, width) {
     if (document.getElementById('moving')) {
-      this.puyo.style.left = `${this.currentX + interval}`;
-      this.currentX += interval;
+      let newWidth = this.currentX + interval;
+      if (newWidth < 0) {
+        newWidth = 2;
+      } else if (newWidth > width - PUYO.width) {
+        newWidth = width - PUYO.width - 2;
+      }
+
+      this.puyo.style.left = `${newWidth}px`;
+
+      this.currentX = newWidth;
     }
   }
 

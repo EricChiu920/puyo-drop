@@ -24,15 +24,16 @@ class Game {
   }
 
   controlScheme(e) {
-    const width = this.board.puyo.getPuyoWidth();
+    const puyoWidth = this.board.puyo.getPuyoWidth();
+    const boardWidth = this.board.getWidth();
 
-    switch (e.keycode) {
+    switch (e.which) {
       case 37: {
-        this.board.puyo.movePuyoSide(width);
+        this.board.puyo.movePuyoSide(-puyoWidth, boardWidth);
         break;
       }
       case 39: {
-        this.board.puyo.movePuyoSide(-width);
+        this.board.puyo.movePuyoSide(puyoWidth, boardWidth);
         break;
       }
       default:
