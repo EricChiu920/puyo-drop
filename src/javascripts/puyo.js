@@ -15,34 +15,33 @@ class Puyo {
 
     puyo.classList.add('puyo');
 
-    puyo.setAttribute('style', `top: 0px; left: 0px; background-position: ${puyoSprite};`);
+    puyo.setAttribute('style', `transform: translate(0px, 0px); background-position: ${puyoSprite};`);
     puyo.id = 'moving';
     // Hide puyo until in comes into view.
     // puyo.style.top = `-${PUYO.height}px`;
-
     this.puyo = puyo;
-    this.currentY = Number(puyo.style.top.split('px')[0]);
-    this.currentX = Number(puyo.style.left.split('px')[0]);
+    this.currentY = Number(puyo.style.transform.split(',')[1].match(/\d+/)[0]);
+    this.currentX = Number(puyo.style.transform.split(',')[0].match(/\d+/)[0]);
     return puyo;
   }
 
   movePuyoDown(interval = 2) {
-    this.puyo.style.top = `${this.currentY + interval}px`;
+    this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY + interval}px)`;
     this.currentY += interval;
   }
 
   movePuyoSide(interval, width) {
     if (document.getElementById('moving')) {
-      let newWidth = this.currentX + interval;
-      if (newWidth < 0) {
-        newWidth = 2;
-      } else if (newWidth > width - PUYO.width) {
-        newWidth = width - PUYO.width - 2;
+      let newX = this.currentX + interval;
+      if (newX < 0) {
+        newX = 2;
+      } else if (newX > width - PUYO.width) {
+        newX = width - PUYO.width - 2;
       }
 
-      this.puyo.style.left = `${newWidth}px`;
+      this.puyo.style.transform = `translate(${newX}px, ${this.currentY}px)`;
 
-      this.currentX = newWidth;
+      this.currentX = newX;
     }
   }
 
@@ -51,7 +50,7 @@ class Puyo {
   }
 
   setPuyoY(y) {
-    this.puyo.style.top = `${y}px`;
+    this.puyo.style.transform = `translate(${this.currentX}px, ${y}px)`;
     this.currentY = y;
   }
 
