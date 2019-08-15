@@ -60,7 +60,6 @@ class Board {
         if (puyo.puyo.id === 'moving') {
           maxHeight = BOARD.height - (this.columns[this.puyoColumn].length + 1) * this.puyoHeight;
         } else {
-          debugger
           const columnHeight = this.columns[Number(puyo.puyo.dataset.column)].length + 1;
           maxHeight = BOARD.height - columnHeight * this.puyoHeight;
         }
@@ -69,10 +68,21 @@ class Board {
 
       requestAnimationFrame(this.animate);
     } else {
-      this.puyo.puyo.dataset.column = this.puyoColumn;
-      this.columns[this.puyoColumn].push(this.puyo);
-      this.dropPuyo();
+      this.settlePuyo();
     }
+  }
+
+  settlePuyo() {
+    this.puyo.puyo.dataset.column = this.puyoColumn;
+
+    const puyoColumn = this.columns[this.puyoColumn];
+    puyoColumn.push(this.puyo);
+    
+    const belowPuyo = puyoColumn[puyoColumn.length - 2];
+    // if (belowPuyo && belowPuyo.puyo.dataset.color === this.puyo.puyo.dataset.color) {
+    //   debugger
+    // }
+    this.dropPuyo();
   }
 
   eachPuyo(callback) {

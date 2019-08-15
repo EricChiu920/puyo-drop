@@ -11,12 +11,15 @@ const PUYO = {
 class Puyo {
   createPuyo() {
     const puyo = document.createElement('div');
-    const puyoSprite = this.getPuyoSprite();
+    const puyoColor = this.getPuyoColor();
+    const puyoSprite = this.getPuyoSprite(puyoColor);
 
     puyo.classList.add('new-puyo');
 
     puyo.setAttribute('style', `transform: translate(132px, 0px); background-position: ${puyoSprite};`);
     puyo.id = 'moving';
+    puyo.dataset.connected = 1;
+    puyo.dataset.color = puyoColor;
     // Hide puyo until in comes into view.
     // puyo.style.top = `-${PUYO.height}px`;
     this.puyo = puyo;
@@ -68,9 +71,12 @@ class Puyo {
     this.currentY = y;
   }
 
-  getPuyoSprite() {
+  getPuyoColor() {
     const randomPuyo = this.randomPuyo();
-    const puyoColor = PUYO.puyoColor[randomPuyo];
+    return PUYO.puyoColor[randomPuyo];
+  }
+
+  getPuyoSprite(puyoColor) {
     const puyoPosition = `${puyoColor}PuyoPosition`;
     return PUYO[puyoPosition];
   }
