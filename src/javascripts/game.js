@@ -3,6 +3,7 @@ import Board from './board';
 class Game {
   constructor(container) {
     this.container = container;
+    this.paused = false;
 
     this.controlScheme = this.controlScheme.bind(this);
   }
@@ -19,6 +20,18 @@ class Game {
     this.restart();
   }
 
+  pause() {
+    this.board.cancelAnimation();
+    this.paused = true;
+  }
+
+  resume() {
+    if (this.paused) {
+      this.board.animate();
+      this.paused = false;
+    }
+  }
+
   addControls() {
     document.addEventListener('keydown', this.controlScheme);
   }
@@ -31,6 +44,10 @@ class Game {
     const maxColumns = this.board.grid.length;
 
     switch (e.which) {
+      case 32: {
+        this.resume();
+        break;
+      }
       case 37: {
         let newColumn = this.board.puyoColumn - 1;
         if (newColumn < 0) {
@@ -61,6 +78,10 @@ class Game {
       }
       case 40: {
         this.board.puyo.movePuyoDown(20, boardHeight - puyoHeight);
+        break;
+      }
+      case 80: {
+        this.pause();
         break;
       }
       default:

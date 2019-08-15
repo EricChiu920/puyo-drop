@@ -14,6 +14,7 @@ class Board {
 
     this.allPuyos = [];
     this.grid = [];
+    this.clearing = false;
     for (let i = 0; i < 6; i += 1) {
       this.grid.push([]);
     }
@@ -63,16 +64,18 @@ class Board {
         if (currentPuyo.id === 'moving') {
           maxHeight = BOARD.height - (this.grid[this.puyoColumn].length + 1) * this.puyoHeight;
         } else {
-          const columnHeight = this.grid[Number(currentPuyo.dataset.column)].length + 1;
           const rowHeight = Number(currentPuyo.dataset.row) + 1;
           maxHeight = BOARD.height - rowHeight * this.puyoHeight;
         }
         puyo.movePuyoDown(BOARD.interval, maxHeight);
       });
 
-      requestAnimationFrame(this.animate);
+      this.animateId = requestAnimationFrame(this.animate);
     } else {
       this.settlePuyo();
+      if (!this.clearing) {
+        this.dropPuyo();
+      }
     }
   }
 
@@ -90,21 +93,21 @@ class Board {
     const connectedPuyos = this.checkConnections(position, color);
 
     if (connectedPuyos.length >= 4) {
+      this.clearing = true;
       connectedPuyos.forEach((puyo) => this.clearPuyo(puyo));
       this.grid.forEach((col) => {
         col.forEach((puyo, i) => {
-          const currentPuyo = puyo.puyo;
-          currentPuyo.dataset.row = i;
+          // eslint-disable-next-line no-param-reassign
+          puyo.puyo.dataset.row = i;
         });
       });
+      this.clearing = false;
     } else {
       connectedPuyos.forEach((puyo) => {
         const currentPuyo = puyo;
         currentPuyo.dataset.traversed = 'false';
       });
     }
-
-    this.dropPuyo();
   }
 
   clearPuyo(puyo) {
@@ -144,6 +147,10 @@ class Board {
 
   eachPuyo(callback) {
     this.allPuyos.forEach(callback.bind(this));
+  }
+
+  cancelAnimation() {
+    cancelAnimationFrame(this.animateId);
   }
 
   getWidth() {
