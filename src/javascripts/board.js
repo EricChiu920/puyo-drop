@@ -110,8 +110,9 @@ class Board {
 
   clearPuyo(puyo) {
     puyo.remove();
-
-    const { dataset: { row, column } } = puyo;
+    let { dataset: { row, column } } = puyo;
+    row = Number(row);
+    column = Number(column);
     this.grid[column].splice(row, 1);
   }
 
