@@ -14,7 +14,6 @@ class Board {
 
     this.allPuyos = [];
     this.grid = [];
-    this.clearing = false;
     for (let i = 0; i < 6; i += 1) {
       this.grid.push([]);
     }
@@ -73,9 +72,8 @@ class Board {
       this.animateId = requestAnimationFrame(this.animate);
     } else {
       this.settlePuyo();
-      if (!this.clearing) {
-        this.dropPuyo();
-      }
+      this.checkForClear();
+      this.dropPuyo();
     }
   }
 
@@ -86,14 +84,15 @@ class Board {
 
     const row = puyoColumn.length - 1;
     this.puyo.puyo.dataset.row = row;
+  }
 
+  checkForClear() {
+    const row = Number(this.puyo.puyo.dataset.row);
     const position = [this.puyoColumn, row];
     const { puyo: { dataset: { color } } } = this.puyo;
-
     const connectedPuyos = this.checkConnections(position, color);
 
     if (connectedPuyos.length >= 4) {
-      this.clearing = true;
       connectedPuyos.forEach((puyo) => this.clearPuyo(puyo));
       this.grid.forEach((col) => {
         col.forEach((puyo, i) => {
@@ -101,7 +100,6 @@ class Board {
           puyo.puyo.dataset.row = i;
         });
       });
-      this.clearing = false;
     } else {
       connectedPuyos.forEach((puyo) => {
         const currentPuyo = puyo;
