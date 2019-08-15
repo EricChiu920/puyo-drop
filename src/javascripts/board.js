@@ -11,14 +11,15 @@ class Board {
     this.container = container;
     this.puyo = new Puyo();
     this.puyoHeight = this.puyo.getPuyoHeight();
-    this.animate = this.animate.bind(this);
 
     this.allPuyos = [];
-    this.columns = [];
-
+    this.grid = [];
     for (let i = 0; i < 6; i += 1) {
-      this.columns.push([]);
+      this.grid.push([]);
     }
+
+    this.animate = this.animate.bind(this);
+    this.clearPuyo = this.clearPuyo.bind(this);
   }
 
   constructBoard() {
@@ -56,12 +57,15 @@ class Board {
 
     if (moving) {
       this.eachPuyo((puyo) => {
+        const currentPuyo = puyo.puyo;
+
         let maxHeight;
-        if (puyo.puyo.id === 'moving') {
-          maxHeight = BOARD.height - (this.columns[this.puyoColumn].length + 1) * this.puyoHeight;
+        if (currentPuyo.id === 'moving') {
+          maxHeight = BOARD.height - (this.grid[this.puyoColumn].length + 1) * this.puyoHeight;
         } else {
-          const columnHeight = this.columns[Number(puyo.puyo.dataset.column)].length + 1;
-          maxHeight = BOARD.height - columnHeight * this.puyoHeight;
+          const columnHeight = this.grid[Number(currentPuyo.dataset.column)].length + 1;
+          const rowHeight = Number(currentPuyo.dataset.row) + 1;
+          maxHeight = BOARD.height - rowHeight * this.puyoHeight;
         }
         puyo.movePuyoDown(BOARD.interval, maxHeight);
       });
@@ -74,15 +78,68 @@ class Board {
 
   settlePuyo() {
     this.puyo.puyo.dataset.column = this.puyoColumn;
-
-    const puyoColumn = this.columns[this.puyoColumn];
+    const puyoColumn = this.grid[this.puyoColumn];
     puyoColumn.push(this.puyo);
-    
-    const belowPuyo = puyoColumn[puyoColumn.length - 2];
-    // if (belowPuyo && belowPuyo.puyo.dataset.color === this.puyo.puyo.dataset.color) {
-    //   debugger
-    // }
+
+    const row = puyoColumn.length - 1;
+    this.puyo.puyo.dataset.row = row;
+
+    const position = [this.puyoColumn, row];
+    const { puyo: { dataset: { color } } } = this.puyo;
+
+    const connectedPuyos = this.checkConnections(position, color);
+
+    if (connectedPuyos.length >= 4) {
+      connectedPuyos.forEach((puyo) => this.clearPuyo(puyo));
+      this.grid.forEach((col) => {
+        col.forEach((puyo, i) => {
+          const currentPuyo = puyo.puyo;
+          currentPuyo.dataset.row = i;
+        });
+      });
+    } else {
+      connectedPuyos.forEach((puyo) => {
+        const currentPuyo = puyo;
+        currentPuyo.dataset.traversed = 'false';
+      });
+    }
+
     this.dropPuyo();
+  }
+
+  clearPuyo(puyo) {
+    puyo.remove();
+
+    const { dataset: { row, column } } = puyo;
+    this.grid[column].splice(row, 1);
+  }
+
+  checkConnections(position, color, connectedPuyos = []) {
+    const [col, row] = position;
+
+    const currentPuyo = this.grid[col][row].puyo;
+    const { dataset: { traversed } } = currentPuyo;
+    if (currentPuyo.dataset.color === color && traversed === 'false') {
+      currentPuyo.dataset.traversed = 'true';
+      connectedPuyos.push(currentPuyo);
+    } else {
+      return connectedPuyos;
+    }
+
+    if (this.grid[col][row - 1]) {
+      connectedPuyos.concat(this.checkConnections([col, row - 1], color, connectedPuyos));
+    }
+    if (this.grid[col][row + 1]) {
+      connectedPuyos.concat(this.checkConnections([col, row + 1], color, connectedPuyos));
+    }
+    if (this.grid[col - 1] && this.grid[col - 1][row]) {
+      connectedPuyos.concat(this.checkConnections([col - 1, row], color, connectedPuyos));
+    }
+    if (this.grid[col + 1] && this.grid[col + 1][row]) {
+      connectedPuyos.concat(this.checkConnections([col + 1, row], color, connectedPuyos));
+    }
+
+    return connectedPuyos;
   }
 
   eachPuyo(callback) {

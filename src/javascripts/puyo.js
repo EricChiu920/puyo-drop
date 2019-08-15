@@ -18,8 +18,8 @@ class Puyo {
 
     puyo.setAttribute('style', `transform: translate(132px, 0px); background-position: ${puyoSprite};`);
     puyo.id = 'moving';
-    puyo.dataset.connected = 1;
     puyo.dataset.color = puyoColor;
+    puyo.dataset.traversed = 'false';
     // Hide puyo until in comes into view.
     // puyo.style.top = `-${PUYO.height}px`;
     this.puyo = puyo;

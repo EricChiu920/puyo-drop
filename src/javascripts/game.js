@@ -28,7 +28,7 @@ class Game {
     const boardWidth = this.board.getWidth();
     const boardHeight = this.board.getHeight();
     const puyoHeight = this.board.puyo.getPuyoHeight();
-    const maxColumns = this.board.columns.length;
+    const maxColumns = this.board.grid.length;
 
     switch (e.which) {
       case 37: {
@@ -38,7 +38,7 @@ class Game {
         }
 
         const puyoY = this.board.puyo.getPuyoY();
-        const columnHeight = boardHeight - (this.board.columns[newColumn].length + 1) * puyoHeight;
+        const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
         if (puyoY < columnHeight) {
           this.board.puyo.movePuyoSide(-puyoWidth, boardWidth);
           this.board.changePuyoColumn(newColumn);
@@ -52,7 +52,7 @@ class Game {
         }
 
         const puyoY = this.board.puyo.getPuyoY();
-        const columnHeight = boardHeight - (this.board.columns[newColumn].length + 1) * puyoHeight;
+        const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
         if (puyoY < columnHeight) {
           this.board.puyo.movePuyoSide(puyoWidth, boardWidth);
           this.board.changePuyoColumn(newColumn);
