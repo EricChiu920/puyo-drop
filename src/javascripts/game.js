@@ -8,16 +8,19 @@ class Game {
     this.controlScheme = this.controlScheme.bind(this);
   }
 
-  restart() {
+  restart(hardMode) {
     this.board = new Board(this.container);
-    this.board.constructBoard();
+
+    if (hardMode) {
+      this.board.setDifficulty();
+    }
 
     this.board.dropPuyo();
     this.addControls();
   }
 
-  play() {
-    this.restart();
+  play(hardMode = false) {
+    this.restart(hardMode);
   }
 
   pause() {

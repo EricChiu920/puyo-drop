@@ -22,20 +22,6 @@ class Board {
     this.clearPuyo = this.clearPuyo.bind(this);
   }
 
-  constructBoard() {
-    for (let i = 0; i < 6; i += 1) {
-      const col = document.createElement('div');
-      for (let j = 0; j < 12; j += 1) {
-        const div = document.createElement('div');
-        div.id = `col-${i + 1}-row-${j + 1}`;
-        div.classList.add('grid-box');
-        col.appendChild(div);
-      }
-
-      this.container.appendChild(col);
-    }
-  }
-
   changePuyoColumn(newColumn) {
     this.puyoColumn = newColumn;
   }
@@ -83,7 +69,7 @@ class Board {
     puyoColumn.push(this.puyo);
 
     if (this.hardMode) {
-      // this.puyo.puyo.style.backgroundImage = 'none';
+      this.puyo.puyo.style.backgroundImage = 'none';
     }
 
     const row = puyoColumn.length - 1;
@@ -115,7 +101,6 @@ class Board {
   clearPuyo(puyo) {
     const currentPuyo = puyo.puyo;
     // currentPuyo.remove();
-    // eslint-disable-next-line no-param-reassign
     currentPuyo.style.backgroundImage = 'none';
 
     let { dataset: { column } } = currentPuyo;
@@ -159,6 +144,10 @@ class Board {
 
   cancelAnimation() {
     cancelAnimationFrame(this.animateId);
+  }
+
+  setDifficulty() {
+    this.hardMode = true;
   }
 
   getWidth() {
