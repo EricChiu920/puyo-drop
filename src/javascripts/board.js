@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 import Puyo from './puyo';
+import PairPuyos from './pairPuyos';
 
 const BOARD = {
   height: 770,
@@ -24,16 +26,18 @@ class Board {
 
   changePuyoColumn(newColumn) {
     this.puyoColumn = newColumn;
+    this.pairColumn = this.pairColumn - this.puyoColumn + newColumn;
   }
 
   dropPuyo() {
-    const puyo = new Puyo();
-    this.puyo = puyo;
-    this.allPuyos.push(puyo);
-    this.newPuyo = puyo.createPuyo();
+    this.puyo = new PairPuyos();
+    this.allPuyos.push(this.puyo.mainPuyo);
+    this.allPuyos.push(this.puyo.pairPuyo);
+    this.newPuyo = this.puyo.createPuyo();
     this.puyoColumn = 2;
+    this.pairColumn = 3;
 
-    this.container.appendChild(this.newPuyo);
+    this.newPuyo.forEach((puyo) => this.container.appendChild(puyo));
 
     this.animate();
   }
@@ -44,10 +48,11 @@ class Board {
     if (moving) {
       this.eachPuyo((puyo) => {
         const currentPuyo = puyo.puyo;
-
         let maxHeight;
-        if (currentPuyo.id === 'moving') {
+        if (currentPuyo.id === 'main-moving') {
           maxHeight = BOARD.height - (this.grid[this.puyoColumn].length + 1) * this.puyoHeight;
+        } else if (currentPuyo.id === 'pair-moving') {
+          maxHeight = BOARD.height - (this.grid[this.pairColumn].length + 1) * this.puyoHeight;
         } else {
           const rowHeight = Number(currentPuyo.dataset.row) + 1;
           maxHeight = BOARD.height - rowHeight * this.puyoHeight;
@@ -55,38 +60,49 @@ class Board {
         puyo.movePuyoDown(BOARD.interval, maxHeight);
       });
 
+      const mainMoving = this.puyo.mainMoving();
+      const pairMoving = this.puyo.pairMoving();
+
+      if (!mainMoving) {
+        this.settlePuyo(this.puyo.mainPuyo, this.puyoColumn);
+        this.checkForClear(this.puyo.mainPuyo, this.puyoColumn);
+      }
+
+      if (!pairMoving) {
+        debugger
+        this.settlePuyo(this.puyo.pairPuyo, this.pairColumn);
+        this.checkForClear(this.puyo.pairPuyo, this.pairColumn);
+      }
+
       this.animateId = requestAnimationFrame(this.animate);
     } else {
-      this.settlePuyo();
-      this.checkForClear();
       this.dropPuyo();
     }
   }
 
-  settlePuyo() {
-    this.puyo.puyo.dataset.column = this.puyoColumn;
-    const puyoColumn = this.grid[this.puyoColumn];
-    puyoColumn.push(this.puyo);
+  settlePuyo(puyo, column) {
+    puyo.puyo.dataset.column = column;
+    const puyoColumn = this.grid[column];
+    puyoColumn.push(puyo);
 
     if (this.hardMode) {
       this.puyo.puyo.style.backgroundImage = 'none';
     }
 
     const row = puyoColumn.length - 1;
-    this.puyo.puyo.dataset.row = row;
+    puyo.puyo.dataset.row = row;
   }
 
-  checkForClear() {
-    const row = Number(this.puyo.puyo.dataset.row);
+  checkForClear(settledPuyo) {
+    const row = Number(settledPuyo.puyo.dataset.row);
     const position = [this.puyoColumn, row];
-    const { puyo: { dataset: { color } } } = this.puyo;
+    const { puyo: { dataset: { color } } } = settledPuyo;
     const connectedPuyos = this.checkConnections(position, color);
 
     if (connectedPuyos.length >= 4) {
       connectedPuyos.forEach((puyo) => this.clearPuyo(puyo));
       this.grid.forEach((col) => {
         col.forEach((puyo, i) => {
-          // eslint-disable-next-line no-param-reassign
           puyo.puyo.dataset.row = i;
         });
       });
@@ -111,7 +127,7 @@ class Board {
 
   checkConnections(position, color, connectedPuyos = []) {
     const [col, row] = position;
-
+    debugger
     const currentPuyoInstance = this.grid[col][row];
     const currentPuyo = currentPuyoInstance.puyo;
     const { dataset: { traversed } } = currentPuyo;

@@ -40,10 +40,10 @@ class Game {
   }
 
   controlScheme(e) {
-    const puyoWidth = this.board.puyo.getPuyoWidth();
+    const puyoWidth = this.board.puyo.mainPuyo.getPuyoWidth();
     const boardWidth = this.board.getWidth();
     const boardHeight = this.board.getHeight();
-    const puyoHeight = this.board.puyo.getPuyoHeight();
+    const puyoHeight = this.board.puyo.mainPuyo.getPuyoHeight();
     const maxColumns = this.board.grid.length;
 
     switch (e.which) {
