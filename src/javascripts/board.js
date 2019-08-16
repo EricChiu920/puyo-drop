@@ -86,7 +86,7 @@ class Board {
     puyoColumn.push(puyo);
 
     if (this.hardMode) {
-      this.puyo.puyo.style.backgroundImage = 'none';
+      puyo.puyo.style.backgroundImage = 'none';
     }
 
     const row = puyoColumn.length - 1;
