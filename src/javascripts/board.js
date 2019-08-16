@@ -3,7 +3,7 @@ import Puyo from './puyo';
 const BOARD = {
   height: 770,
   width: 396,
-  interval: 8,
+  interval: 6,
 };
 
 class Board {
@@ -82,6 +82,10 @@ class Board {
     const puyoColumn = this.grid[this.puyoColumn];
     puyoColumn.push(this.puyo);
 
+    if (this.hardMode) {
+      // this.puyo.puyo.style.backgroundImage = 'none';
+    }
+
     const row = puyoColumn.length - 1;
     this.puyo.puyo.dataset.row = row;
   }
@@ -102,28 +106,33 @@ class Board {
       });
     } else {
       connectedPuyos.forEach((puyo) => {
-        const currentPuyo = puyo;
+        const currentPuyo = puyo.puyo;
         currentPuyo.dataset.traversed = 'false';
       });
     }
   }
 
   clearPuyo(puyo) {
-    puyo.remove();
-    let { dataset: { row, column } } = puyo;
-    row = Number(row);
+    const currentPuyo = puyo.puyo;
+    // currentPuyo.remove();
+    // eslint-disable-next-line no-param-reassign
+    currentPuyo.style.backgroundImage = 'none';
+
+    let { dataset: { column } } = currentPuyo;
     column = Number(column);
-    this.grid[column].splice(row, 1);
+    const idx = this.grid[column].indexOf(puyo);
+    this.grid[column].splice(idx, 1);
   }
 
   checkConnections(position, color, connectedPuyos = []) {
     const [col, row] = position;
 
-    const currentPuyo = this.grid[col][row].puyo;
+    const currentPuyoInstance = this.grid[col][row];
+    const currentPuyo = currentPuyoInstance.puyo;
     const { dataset: { traversed } } = currentPuyo;
     if (currentPuyo.dataset.color === color && traversed === 'false') {
       currentPuyo.dataset.traversed = 'true';
-      connectedPuyos.push(currentPuyo);
+      connectedPuyos.push(currentPuyoInstance);
     } else {
       return connectedPuyos;
     }
