@@ -29,12 +29,11 @@ class Puyo {
   }
 
   movePuyoDown(interval, maxY = 720) {
-    if (this.isMoving()) {
+    if (this.isMoving(this.puyo.id)) {
       let newY = this.currentY + interval;
-
       if (newY > maxY) {
         newY = maxY;
-        this.puyo.id = '';
+        this.puyo.id = `${this.puyo.id}-landed`;
         return;
       }
 
@@ -44,7 +43,7 @@ class Puyo {
   }
 
   movePuyoSide(interval, maxX = 400) {
-    if (this.isMoving()) {
+    if (this.isMoving(this.puyo.id)) {
       let newX = this.currentX + interval;
       if (newX < 0) {
         newX = 0;
@@ -58,8 +57,8 @@ class Puyo {
     }
   }
 
-  isMoving() {
-    return (Boolean(document.getElementById('main-moving')) || Boolean(document.getElementById('main-moving')));
+  isMoving(id) {
+    return Boolean(document.getElementById(id));
   }
 
   randomPuyo() {

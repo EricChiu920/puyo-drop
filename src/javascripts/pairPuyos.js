@@ -5,9 +5,15 @@ const ROTATION = {
 };
 
 class PairPuyos {
-  constructor() {
-    this.mainPuyo = new Puyo();
-    this.pairPuyo = new Puyo();
+  constructor(num = 1) {
+    this.puyos = [];
+
+    // for (let i = 0; i < num; i += 1) {
+    //   this.puyos.push(new Puyo());
+    // }
+
+    // this.mainPuyo = new Puyo();
+    // this.pairPuyo = new Puyo();
     this.pairDirection = 'right';
   }
 
@@ -20,15 +26,15 @@ class PairPuyos {
   }
 
   isMoving() {
-    return this.mainPuyo.isMoving() && this.pairPuyo.isMoving();
+    return this.mainPuyo.isMoving('main-moving') || this.pairPuyo.isMoving('pair-moving');
   }
 
   mainMoving() {
-    return this.mainPuyo.isMoving();
+    return this.mainPuyo.isMoving('main-moving');
   }
 
   pairMoving() {
-    return this.pairPuyo.isMoving();
+    return this.pairPuyo.isMoving('pair-moving');
   }
 
   getPuyoY() {

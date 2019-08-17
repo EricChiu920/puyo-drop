@@ -25,8 +25,10 @@ class Board {
   }
 
   changePuyoColumn(newColumn) {
-    this.puyoColumn = newColumn;
     this.pairColumn = this.pairColumn - this.puyoColumn + newColumn;
+    this.puyoColumn = newColumn;
+    this.puyo.mainPuyo.puyo.dataset.column = this.puyoColumn;
+    this.puyo.pairPuyo.puyo.dataset.column = this.pairColumn;
   }
 
   dropPuyo() {
@@ -36,6 +38,9 @@ class Board {
     this.newPuyo = this.puyo.createPuyo();
     this.puyoColumn = 2;
     this.pairColumn = 3;
+
+    this.puyo.mainPuyo.puyo.dataset.column = this.puyoColumn;
+    this.puyo.pairPuyo.puyo.dataset.column = this.pairColumn;
 
     this.newPuyo.forEach((puyo) => this.container.appendChild(puyo));
 
@@ -48,28 +53,31 @@ class Board {
     if (moving) {
       this.eachPuyo((puyo) => {
         const currentPuyo = puyo.puyo;
-        let maxHeight;
-        if (currentPuyo.id === 'main-moving') {
-          maxHeight = BOARD.height - (this.grid[this.puyoColumn].length + 1) * this.puyoHeight;
-        } else if (currentPuyo.id === 'pair-moving') {
-          maxHeight = BOARD.height - (this.grid[this.pairColumn].length + 1) * this.puyoHeight;
+        let height;
+
+        if (currentPuyo.id === '') {
+          height = Number(currentPuyo.dataset.row) + 1;
         } else {
-          const rowHeight = Number(currentPuyo.dataset.row) + 1;
-          maxHeight = BOARD.height - rowHeight * this.puyoHeight;
+          let { column } = currentPuyo.dataset;
+          column = Number(column);
+          height = Number(this.grid[column].length) + 1;
         }
+
+        const maxHeight = BOARD.height - height * this.puyoHeight;
         puyo.movePuyoDown(BOARD.interval, maxHeight);
       });
 
       const mainMoving = this.puyo.mainMoving();
       const pairMoving = this.puyo.pairMoving();
 
-      if (!mainMoving) {
+      if (!mainMoving && this.puyo.mainPuyo.puyo.id.includes('landed')) {
+        this.puyo.mainPuyo.puyo.id = '';
         this.settlePuyo(this.puyo.mainPuyo, this.puyoColumn);
         this.checkForClear(this.puyo.mainPuyo, this.puyoColumn);
       }
 
-      if (!pairMoving) {
-        debugger
+      if (!pairMoving && this.puyo.pairPuyo.puyo.id.includes('landed')) {
+        this.puyo.pairPuyo.puyo.id = '';
         this.settlePuyo(this.puyo.pairPuyo, this.pairColumn);
         this.checkForClear(this.puyo.pairPuyo, this.pairColumn);
       }
@@ -84,18 +92,17 @@ class Board {
     puyo.puyo.dataset.column = column;
     const puyoColumn = this.grid[column];
     puyoColumn.push(puyo);
+    const row = puyoColumn.length - 1;
 
     if (this.hardMode) {
       puyo.puyo.style.backgroundImage = 'none';
     }
-
-    const row = puyoColumn.length - 1;
     puyo.puyo.dataset.row = row;
   }
 
-  checkForClear(settledPuyo) {
+  checkForClear(settledPuyo, column) {
     const row = Number(settledPuyo.puyo.dataset.row);
-    const position = [this.puyoColumn, row];
+    const position = [column, row];
     const { puyo: { dataset: { color } } } = settledPuyo;
     const connectedPuyos = this.checkConnections(position, color);
 
@@ -127,7 +134,6 @@ class Board {
 
   checkConnections(position, color, connectedPuyos = []) {
     const [col, row] = position;
-    debugger
     const currentPuyoInstance = this.grid[col][row];
     const currentPuyo = currentPuyoInstance.puyo;
     const { dataset: { traversed } } = currentPuyo;
