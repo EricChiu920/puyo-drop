@@ -1,17 +1,27 @@
 import Board from './board';
 
+const GAME = {
+  levelIncreaseTime: 30000,
+};
+
 class Game {
   constructor(container) {
     this.container = container;
     this.paused = false;
+    this.level = 0;
 
-    this.controlScheme = this.controlScheme.bind(this);
+    this.pointsText = document.querySelector('.points');
+    this.levelText = document.querySelector('.level');
+
+
     this.animate = this.animate.bind(this);
-    this.points = document.querySelector('.points');
+    this.controlScheme = this.controlScheme.bind(this);
+    this.increaseLevel = this.increaseLevel.bind(this);
   }
 
   restart(hardMode) {
-    this.board = new Board(this.container);
+    this.board = new Board(this.container, this.level);
+    this.increaseLevelId = setInterval(this.increaseLevel, GAME.levelIncreaseTime);
 
     if (hardMode) {
       this.board.setDifficulty();
@@ -23,12 +33,17 @@ class Game {
   }
 
   animate() {
-    this.points.innerHTML = this.board.points;
-    this.board.animate();
+    this.pointsText.innerText = this.board.points;
+    this.board.animate(this.level);
 
     if (!this.gameOver()) {
       this.rafId = requestAnimationFrame(this.animate);
     }
+  }
+
+  increaseLevel() {
+    this.level += 1;
+    this.levelText.innerText = this.level + 1;
   }
 
   play(hardMode = false) {
@@ -37,18 +52,20 @@ class Game {
 
   pause() {
     cancelAnimationFrame(this.rafId);
+    clearInterval(this.increaseLevelId);
     this.paused = true;
   }
 
   resume() {
     if (this.paused) {
+      this.increaseLevelId = setInterval(this.increaseLevel, GAME.levelIncreaseTime);
       this.animate();
       this.paused = false;
     }
   }
 
   gameOver() {
-    return this.board.grid[2].length >= 12;
+    return this.board.grid[2].length >= 12 || this.board.grid.some((col) => col.length > 13);
   }
 
   addControls() {

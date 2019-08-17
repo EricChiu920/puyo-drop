@@ -15,6 +15,7 @@ class Board {
     this.puyo = new Puyo();
     this.puyoHeight = this.puyo.getPuyoHeight();
     this.points = 0;
+    this.level = 0;
     this.clearing = false;
 
     this.allPuyos = [];
@@ -52,7 +53,7 @@ class Board {
     this.newPuyo.forEach((puyo) => this.container.appendChild(puyo));
   }
 
-  animate() {
+  animate(level) {
     const moving = this.puyo.isMoving();
 
     if (moving) {
@@ -69,7 +70,7 @@ class Board {
         }
 
         const maxHeight = BOARD.height - height * this.puyoHeight;
-        const speedIncrease = Math.floor(this.points / 3000) * 0.5;
+        const speedIncrease = level * 0.5;
 
         puyo.movePuyoDown(BOARD.interval + speedIncrease, maxHeight);
       });
