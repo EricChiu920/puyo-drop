@@ -52,9 +52,9 @@ class Game {
         break;
       }
       case 37: {
-        let newColumn = this.board.puyoColumn - 1;
-        if (newColumn < 0) {
-          newColumn = 0;
+        const newColumn = this.board.puyoColumn - 1;
+        if (newColumn < 0 || (newColumn === 0 && this.board.puyo.pairDirection === 'left')) {
+          return;
         }
 
         const puyoY = this.board.puyo.getPuyoY();
@@ -66,9 +66,9 @@ class Game {
         break;
       }
       case 39: {
-        let newColumn = this.board.puyoColumn + 1;
-        if (newColumn > maxColumns - 1) {
-          newColumn = maxColumns - 1;
+        const newColumn = this.board.puyoColumn + 1;
+        if (newColumn > maxColumns - 1 || (newColumn > maxColumns - 2 && this.board.puyo.pairDirection === 'right')) {
+          return;
         }
 
         const puyoY = this.board.puyo.getPuyoY();
