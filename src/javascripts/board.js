@@ -79,7 +79,7 @@ class Board {
         this.puyo.pairPuyo.puyo.id = '';
         this.settlePuyo(this.puyo.pairPuyo, this.pairColumn);
       }
-      
+
       this.animateId = requestAnimationFrame(this.animate);
     } else {
       this.checkForClear(this.puyo.pairPuyo);
@@ -133,7 +133,6 @@ class Board {
     const columnIdx = this.grid[column].indexOf(puyo);
     const allPuyoIdx = this.allPuyos.indexOf(puyo);
 
-    debugger
     this.allPuyos.splice(allPuyoIdx, 1);
     this.grid[column].splice(columnIdx, 1);
   }

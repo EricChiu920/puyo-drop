@@ -23,40 +23,39 @@ class Puyo {
     // Hide puyo until in comes into view.
     // puyo.style.top = `-${PUYO.height}px`;
     this.puyo = puyo;
+    this.landed = false;
     this.currentY = Number(puyo.style.transform.split(',')[1].match(/\d+/)[0]);
     this.currentX = Number(puyo.style.transform.split(',')[0].match(/\d+/)[0]);
     return puyo;
   }
 
   movePuyoDown(interval, maxY = 720) {
-    if (this.isMoving(this.puyo.id)) {
-      let newY = this.currentY + interval;
-      if (newY > maxY) {
-        newY = maxY;
-        this.currentY = newY;
-        this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY}px)`;
-        this.puyo.id = `${this.puyo.id}-landed`;
-        return;
-      }
-
-      this.currentY += interval;
+    let newY = this.currentY + interval;
+    if (newY > maxY) {
+      newY = maxY;
+      this.currentY = newY;
       this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY}px)`;
+      if (this.puyo.id !== '') {
+        this.puyo.id = `${this.puyo.id}-landed`;
+      }
+      return;
     }
+
+    this.currentY += interval;
+    this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY}px)`;
   }
 
   movePuyoSide(interval, maxX = 400) {
-    if (this.isMoving(this.puyo.id)) {
-      let newX = this.currentX + interval;
-      if (newX < 0) {
-        newX = 0;
-      } else if (newX > maxX - PUYO.width) {
-        newX = maxX - PUYO.width;
-      }
-
-      this.puyo.style.transform = `translate(${newX}px, ${this.currentY}px)`;
-
-      this.currentX = newX;
+    let newX = this.currentX + interval;
+    if (newX < 0) {
+      newX = 0;
+    } else if (newX > maxX - PUYO.width) {
+      newX = maxX - PUYO.width;
     }
+
+    this.puyo.style.transform = `translate(${newX}px, ${this.currentY}px)`;
+
+    this.currentX = newX;
   }
 
   isMoving(id) {
