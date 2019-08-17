@@ -73,17 +73,16 @@ class Board {
       if (!mainMoving && this.puyo.mainPuyo.puyo.id.includes('landed')) {
         this.puyo.mainPuyo.puyo.id = '';
         this.settlePuyo(this.puyo.mainPuyo, this.puyoColumn);
-        this.checkForClear(this.puyo.mainPuyo, this.puyoColumn);
       }
 
       if (!pairMoving && this.puyo.pairPuyo.puyo.id.includes('landed')) {
         this.puyo.pairPuyo.puyo.id = '';
         this.settlePuyo(this.puyo.pairPuyo, this.pairColumn);
-        this.checkForClear(this.puyo.pairPuyo, this.pairColumn);
       }
-
+      
       this.animateId = requestAnimationFrame(this.animate);
     } else {
+      this.checkForClear(this.puyo.pairPuyo);
       this.dropPuyo();
     }
   }
@@ -100,8 +99,11 @@ class Board {
     puyo.puyo.dataset.row = row;
   }
 
-  checkForClear(settledPuyo, column) {
-    const row = Number(settledPuyo.puyo.dataset.row);
+  checkForClear(settledPuyo) {
+    let { puyo: { dataset: { column, row } } } = settledPuyo;
+    column = Number(column);
+    row = Number(row);
+
     const position = [column, row];
     const { puyo: { dataset: { color } } } = settledPuyo;
     const connectedPuyos = this.checkConnections(position, color);
@@ -128,8 +130,12 @@ class Board {
 
     let { dataset: { column } } = currentPuyo;
     column = Number(column);
-    const idx = this.grid[column].indexOf(puyo);
-    this.grid[column].splice(idx, 1);
+    const columnIdx = this.grid[column].indexOf(puyo);
+    const allPuyoIdx = this.allPuyos.indexOf(puyo);
+
+    debugger
+    this.allPuyos.splice(allPuyoIdx, 1);
+    this.grid[column].splice(columnIdx, 1);
   }
 
   checkConnections(position, color, connectedPuyos = []) {

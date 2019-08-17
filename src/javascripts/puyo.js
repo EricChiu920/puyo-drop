@@ -33,12 +33,14 @@ class Puyo {
       let newY = this.currentY + interval;
       if (newY > maxY) {
         newY = maxY;
+        this.currentY = newY;
+        this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY}px)`;
         this.puyo.id = `${this.puyo.id}-landed`;
         return;
       }
 
-      this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY + interval}px)`;
       this.currentY += interval;
+      this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY}px)`;
     }
   }
 
