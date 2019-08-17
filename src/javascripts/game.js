@@ -6,6 +6,8 @@ class Game {
     this.paused = false;
 
     this.controlScheme = this.controlScheme.bind(this);
+    this.animate = this.animate.bind(this);
+    this.points = document.querySelector('.points');
   }
 
   restart(hardMode) {
@@ -17,6 +19,16 @@ class Game {
 
     this.board.dropPuyo();
     this.addControls();
+    this.animate();
+  }
+
+  animate() {
+    this.points.innerHTML = this.board.points;
+    this.board.animate();
+
+    if (!this.gameOver()) {
+      this.rafId = requestAnimationFrame(this.animate);
+    }
   }
 
   play(hardMode = false) {
@@ -24,15 +36,19 @@ class Game {
   }
 
   pause() {
-    this.board.cancelAnimation();
+    cancelAnimationFrame(this.rafId);
     this.paused = true;
   }
 
   resume() {
     if (this.paused) {
-      this.board.animate();
+      this.animate();
       this.paused = false;
     }
+  }
+
+  gameOver() {
+    return this.board.grid[2].length >= 12;
   }
 
   addControls() {

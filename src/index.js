@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const game = new Game(container);
   function playGame() {
     return () => {
+      while (container.lastChild) {
+        container.lastChild.remove();
+      }
       game.play(hardMode);
     };
   }

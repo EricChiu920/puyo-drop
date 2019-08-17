@@ -3,7 +3,13 @@
  -moz-osx-font-smoothing: grayscale;
 }
 
-.container {
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-container {
   display: flex;
   flex-direction: column;
   justify-content: center;

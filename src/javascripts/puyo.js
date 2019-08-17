@@ -2,9 +2,13 @@ const PUYO = {
   height: 64,
   width: 66,
   redPuyoPosition: '-515px -2px',
-  greenPuyoPosition: '-515px -64px',
   bluePuyoPosition: '-515px -132px',
+  greenPuyoPosition: '-515px -64px',
   yellowPuyoPosition: '-515px -197px',
+  redClearingPosition: '-1230px -66px',
+  blueClearingPosition: '-1230px -197px',
+  greenClearingPosition: '-1230px -132px',
+  yellowClearingPosition: '-1230px -260px',
   puyoColor: ['red', 'green', 'blue', 'yellow'],
 };
 
@@ -12,7 +16,7 @@ class Puyo {
   createPuyo(side = 0, id = 'main-moving') {
     const puyo = document.createElement('div');
     const puyoColor = this.getPuyoColor();
-    const puyoSprite = this.getPuyoSprite(puyoColor);
+    const puyoSprite = this.getPuyoSprite(puyoColor, 'Puyo');
 
     puyo.classList.add('new-puyo');
 
@@ -81,8 +85,9 @@ class Puyo {
     return PUYO.puyoColor[randomPuyo];
   }
 
-  getPuyoSprite(puyoColor) {
-    const puyoPosition = `${puyoColor}PuyoPosition`;
+  getPuyoSprite(puyoColor, type) {
+    const spriteType = type[0].toUpperCase() + type.slice(1);
+    const puyoPosition = `${puyoColor}${spriteType}Position`;
     return PUYO[puyoPosition];
   }
 
