@@ -42,11 +42,12 @@ class Puyo {
       if (this.puyo.id !== '') {
         this.puyo.id = `${this.puyo.id}-landed`;
       }
-      return;
+      return false;
     }
 
     this.currentY += interval;
     this.puyo.style.transform = `translate(${this.currentX}px, ${this.currentY}px)`;
+    return true;
   }
 
   movePuyoSide(interval, maxX = 400) {

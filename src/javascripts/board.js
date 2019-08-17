@@ -55,41 +55,48 @@ class Board {
 
   animate(level) {
     const moving = this.puyo.isMoving();
+    const puyosMoved = [];
 
-    if (moving) {
-      this.eachPuyo((puyo) => {
-        const currentPuyo = puyo.puyo;
-        let height;
+    this.eachPuyo((puyo) => {
+      const currentPuyo = puyo.puyo;
+      let height;
 
-        if (currentPuyo.id === '') {
-          height = Number(currentPuyo.dataset.row) + 1;
-        } else {
-          let { column } = currentPuyo.dataset;
-          column = Number(column);
-          height = Number(this.grid[column].length) + 1;
-        }
-
-        const maxHeight = BOARD.height - height * this.puyoHeight;
-        const speedIncrease = level * 0.5;
-
-        puyo.movePuyoDown(BOARD.interval + speedIncrease, maxHeight);
-      });
-
-      const mainMoving = this.puyo.mainMoving();
-      const pairMoving = this.puyo.pairMoving();
-
-      if (!mainMoving && this.puyo.mainPuyo.puyo.id.includes('landed')) {
-        this.puyo.mainPuyo.puyo.id = '';
-        this.settlePuyo(this.puyo.mainPuyo, this.puyoColumn);
+      if (currentPuyo.id === '') {
+        height = Number(currentPuyo.dataset.row) + 1;
+      } else {
+        let { column } = currentPuyo.dataset;
+        column = Number(column);
+        height = Number(this.grid[column].length) + 1;
       }
 
-      if (!pairMoving && this.puyo.pairPuyo.puyo.id.includes('landed')) {
-        this.puyo.pairPuyo.puyo.id = '';
-        this.settlePuyo(this.puyo.pairPuyo, this.pairColumn);
-      }
-    } else {
-      this.checkForClear(this.puyo.mainPuyo);
-      this.checkForClear(this.puyo.pairPuyo);
+      const maxHeight = BOARD.height - height * this.puyoHeight;
+      const speedIncrease = level * 0.5;
+
+      puyosMoved.push(puyo.movePuyoDown(BOARD.interval + speedIncrease, maxHeight));
+    });
+
+    if (puyosMoved.every((moved) => moved === false)) {
+      this.clearing = false;
+    }
+
+    const mainMoving = this.puyo.mainMoving();
+    const pairMoving = this.puyo.pairMoving();
+
+    if (!mainMoving && this.puyo.mainPuyo.puyo.id.includes('landed')) {
+      this.puyo.mainPuyo.puyo.id = '';
+      this.settlePuyo(this.puyo.mainPuyo, this.puyoColumn);
+    }
+
+    if (!pairMoving && this.puyo.pairPuyo.puyo.id.includes('landed')) {
+      this.puyo.pairPuyo.puyo.id = '';
+      this.settlePuyo(this.puyo.pairPuyo, this.pairColumn);
+    }
+    // this.checkForClear(this.puyo.mainPuyo);
+    // this.checkForClear(this.puyo.pairPuyo);
+
+    this.eachPuyo((puyo) => this.checkForClear(puyo));
+
+    if (!this.clearing && !moving) {
       this.dropPuyo();
     }
   }
@@ -117,16 +124,21 @@ class Board {
     const connectedPuyos = this.checkConnections(position, color);
 
     if (connectedPuyos.length >= 4) {
+      this.clearing = true;
       this.points += connectedPuyos.length * 100;
       connectedPuyos.forEach((puyo) => this.setClearing(puyo));
-      await sleep(50);
+
+      let sleepTime = 50;
+      if (this.clearing) {
+        sleepTime = 200;
+      }
+      await sleep(sleepTime);
       connectedPuyos.forEach((puyo) => this.clearPuyo(puyo));
       this.grid.forEach((col) => {
         col.forEach((puyo, i) => {
           puyo.puyo.dataset.row = i;
         });
       });
-
       return true;
     }
 

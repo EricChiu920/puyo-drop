@@ -86,7 +86,7 @@ class Game {
       }
       case 37: {
         const newColumn = this.board.puyoColumn - 1;
-        if (newColumn < 0 || (newColumn === 0 && this.board.puyo.pairDirection === 'left')) {
+        if (newColumn < 0 || (newColumn === 0 && this.board.puyo.pairDirection === 'left') || this.gameOver()) {
           return;
         }
 
@@ -100,7 +100,7 @@ class Game {
       }
       case 39: {
         const newColumn = this.board.puyoColumn + 1;
-        if (newColumn > maxColumns - 1 || (newColumn > maxColumns - 2 && this.board.puyo.pairDirection === 'right')) {
+        if (newColumn > maxColumns - 1 || (newColumn > maxColumns - 2 && this.board.puyo.pairDirection === 'right') || this.gameOver()) {
           return;
         }
 
@@ -110,10 +110,6 @@ class Game {
           this.board.puyo.movePuyoSide(puyoWidth, boardWidth, 'pair-moving');
           this.board.changePuyoColumn(newColumn);
         }
-        break;
-      }
-      case 40: {
-        this.board.puyo.movePuyoDown(20, boardHeight - puyoHeight);
         break;
       }
       case 80: {
