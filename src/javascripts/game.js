@@ -74,7 +74,7 @@ class Game {
         const puyoY = this.board.puyo.getPuyoY();
         const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
         if (puyoY < columnHeight) {
-          this.board.puyo.movePuyoSide(puyoWidth, boardWidth);
+          this.board.puyo.movePuyoSide(puyoWidth, boardWidth, 'pair-moving');
           this.board.changePuyoColumn(newColumn);
         }
         break;

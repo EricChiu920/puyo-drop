@@ -25,10 +25,14 @@ class Board {
   }
 
   changePuyoColumn(newColumn) {
-    this.pairColumn = this.pairColumn - this.puyoColumn + newColumn;
-    this.puyoColumn = newColumn;
-    this.puyo.mainPuyo.puyo.dataset.column = this.puyoColumn;
-    this.puyo.pairPuyo.puyo.dataset.column = this.pairColumn;
+    if (this.puyo.pairPuyo.puyo.id !== '') {
+      this.pairColumn = this.pairColumn - this.puyoColumn + newColumn;
+      this.puyo.pairPuyo.puyo.dataset.column = this.pairColumn;
+    }
+    if (this.puyo.mainPuyo.puyo.id !== '') {
+      this.puyoColumn = newColumn;
+      this.puyo.mainPuyo.puyo.dataset.column = this.puyoColumn;
+    }
   }
 
   dropPuyo() {
@@ -82,7 +86,9 @@ class Board {
 
       this.animateId = requestAnimationFrame(this.animate);
     } else {
-      this.checkForClear(this.puyo.pairPuyo);
+      if (!this.checkForClear(this.puyo.mainPuyo)) {
+        this.checkForClear(this.puyo.pairPuyo);
+      }
       this.dropPuyo();
     }
   }
@@ -92,6 +98,7 @@ class Board {
     const puyoColumn = this.grid[column];
     puyoColumn.push(puyo);
     const row = puyoColumn.length - 1;
+    puyo.puyo.id = '';
 
     if (this.hardMode) {
       puyo.puyo.style.backgroundImage = 'none';
@@ -115,12 +122,16 @@ class Board {
           puyo.puyo.dataset.row = i;
         });
       });
-    } else {
-      connectedPuyos.forEach((puyo) => {
-        const currentPuyo = puyo.puyo;
-        currentPuyo.dataset.traversed = 'false';
-      });
+
+      return true;
     }
+
+    connectedPuyos.forEach((puyo) => {
+      const currentPuyo = puyo.puyo;
+      currentPuyo.dataset.traversed = 'false';
+    });
+
+    return false;
   }
 
   clearPuyo(puyo) {
@@ -140,6 +151,9 @@ class Board {
   checkConnections(position, color, connectedPuyos = []) {
     const [col, row] = position;
     const currentPuyoInstance = this.grid[col][row];
+    if (currentPuyoInstance === undefined) {
+      debugger
+    }
     const currentPuyo = currentPuyoInstance.puyo;
     const { dataset: { traversed } } = currentPuyo;
     if (currentPuyo.dataset.color === color && traversed === 'false') {

@@ -46,16 +46,21 @@ class Puyo {
   }
 
   movePuyoSide(interval, maxX = 400) {
-    let newX = this.currentX + interval;
-    if (newX < 0) {
-      newX = 0;
-    } else if (newX > maxX - PUYO.width) {
-      newX = maxX - PUYO.width;
+    if (this.puyo.id !== '') {
+      let newX = this.currentX + interval;
+      if (newX < 0) {
+        newX = 0;
+      } else if (newX > maxX - PUYO.width) {
+        newX = maxX - PUYO.width;
+      }
+
+      this.puyo.style.transform = `translate(${newX}px, ${this.currentY}px)`;
+      this.currentX = newX;
+
+      return true;
     }
 
-    this.puyo.style.transform = `translate(${newX}px, ${this.currentY}px)`;
-
-    this.currentX = newX;
+    return false;
   }
 
   isMoving(id) {
