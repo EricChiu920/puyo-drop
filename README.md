@@ -1,4 +1,5 @@
 # Puyo Drop
+[Live Link](https://ericchiu920.github.io/puyo-drop/)
 
 ## Background and overview
 Puyo Drop is a game that is similar to tetris. Groups of colored blocks, or puyo will drop down from the top of the screen and fall until it hits the bottom of the screen, or another puyo. The player loses when any puyo touches the top of the screen of the third row from the left.
