@@ -91,8 +91,6 @@ class Board {
       this.puyo.pairPuyo.puyo.id = '';
       this.settlePuyo(this.puyo.pairPuyo, this.pairColumn);
     }
-    // this.checkForClear(this.puyo.mainPuyo);
-    // this.checkForClear(this.puyo.pairPuyo);
 
     this.eachPuyo((puyo) => this.checkForClear(puyo));
 
@@ -130,7 +128,7 @@ class Board {
 
       let sleepTime = 50;
       if (this.clearing) {
-        sleepTime = 200;
+        sleepTime += 200;
       }
       await sleep(sleepTime);
       connectedPuyos.forEach((puyo) => this.clearPuyo(puyo));
