@@ -92,7 +92,9 @@ class Board {
       this.settlePuyo(this.puyo.pairPuyo, this.pairColumn);
     }
 
-    this.eachPuyo((puyo) => this.checkForClear(puyo));
+    if (!moving) {
+      this.eachPuyo((puyo) => this.checkForClear(puyo));
+    }
 
     if (!this.clearing && !moving) {
       this.dropPuyo();
@@ -126,11 +128,7 @@ class Board {
       this.points += connectedPuyos.length * 100;
       connectedPuyos.forEach((puyo) => this.setClearing(puyo));
 
-      let sleepTime = 50;
-      if (this.clearing) {
-        sleepTime += 200;
-      }
-      await sleep(sleepTime);
+      await sleep(50);
       connectedPuyos.forEach((puyo) => this.clearPuyo(puyo));
       this.grid.forEach((col) => {
         col.forEach((puyo, i) => {

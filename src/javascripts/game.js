@@ -22,6 +22,8 @@ class Game {
   restart(hardMode) {
     this.board = new Board(this.container, this.level);
     this.increaseLevelId = setInterval(this.increaseLevel, GAME.levelIncreaseTime);
+    this.level = -1;
+    this.increaseLevel();
 
     if (hardMode) {
       this.board.setDifficulty();
@@ -106,7 +108,14 @@ class Game {
 
         const puyoY = this.board.puyo.getPuyoY();
         const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
-        if (puyoY < columnHeight) {
+
+        let pairMove = true;
+        // if (this.board.puyo.pairDirection === 'right') {
+        //   const secondColumnHeight = boardHeight - (this.board.grid[newColumn + 1].length + 1) * puyoHeight;
+        //   pairMove = puyoY < secondColumnHeight;
+        // }
+
+        if (puyoY < columnHeight && pairMove) {
           this.board.puyo.movePuyoSide(puyoWidth, boardWidth, 'pair-moving');
           this.board.changePuyoColumn(newColumn);
         }
