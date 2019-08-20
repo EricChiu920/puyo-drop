@@ -128,7 +128,7 @@ class Board {
       this.points += connectedPuyos.length * 100;
       connectedPuyos.forEach((puyo) => this.setClearing(puyo));
 
-      await sleep(50);
+      await sleep(100);
       connectedPuyos.forEach((puyo) => this.clearPuyo(puyo));
       this.grid.forEach((col) => {
         col.forEach((puyo, i) => {

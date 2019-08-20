@@ -40,6 +40,8 @@ class Game {
 
     if (!this.gameOver()) {
       this.rafId = requestAnimationFrame(this.animate);
+    } else {
+      clearInterval(this.increaseLevelId);
     }
   }
 
@@ -49,6 +51,8 @@ class Game {
   }
 
   play(hardMode = false) {
+    this.pause();
+    this.paused = false;
     this.restart(hardMode);
   }
 
@@ -93,6 +97,14 @@ class Game {
         }
 
         const puyoY = this.board.puyo.getPuyoY();
+
+        // if (this.board.puyo.pairDirection === 'right') {
+        //   const secondColumnHeight = boardHeight - (this.board.grid[newColumn - 1].length + 1) * puyoHeight;
+        //   if (puyoY < secondColumnHeight) {
+        //     return;
+        //   }
+        // }
+
         const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
         if (puyoY < columnHeight) {
           this.board.puyo.movePuyoSide(-puyoWidth, boardWidth);
@@ -107,15 +119,14 @@ class Game {
         }
 
         const puyoY = this.board.puyo.getPuyoY();
-        const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
 
-        let pairMove = true;
-        // if (this.board.puyo.pairDirection === 'right') {
-        //   const secondColumnHeight = boardHeight - (this.board.grid[newColumn + 1].length + 1) * puyoHeight;
-        //   pairMove = puyoY < secondColumnHeight;
-        // }
+        let sideShift = 0;
+        if (this.board.puyo.pairDirection === 'right' && this.board.puyo.pairMoving()) {
+          sideShift += 1;
+        }
+        const columnHeight = boardHeight - (this.board.grid[newColumn + sideShift].length + 1) * puyoHeight;
 
-        if (puyoY < columnHeight && pairMove) {
+        if (puyoY < columnHeight) {
           this.board.puyo.movePuyoSide(puyoWidth, boardWidth, 'pair-moving');
           this.board.changePuyoColumn(newColumn);
         }
