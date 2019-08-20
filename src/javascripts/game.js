@@ -106,7 +106,15 @@ class Game {
         // }
 
         const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
-        if (puyoY < columnHeight) {
+        let pairCanMove = true;
+        const pairNewColumn = this.board.pairColumn - 1;
+        const pairColumnHeight = boardHeight - (this.board.grid[pairNewColumn].length + 1) * puyoHeight;
+        pairCanMove = puyoY < pairColumnHeight;
+
+        if (puyoY < columnHeight && pairCanMove) {
+          this.board.puyo.movePuyoSide(-puyoWidth, boardWidth);
+          this.board.changePuyoColumn(newColumn);
+        } else if (this.board.puyo.pairDirection === 'right' && pairCanMove) {
           this.board.puyo.movePuyoSide(-puyoWidth, boardWidth);
           this.board.changePuyoColumn(newColumn);
         }
@@ -114,7 +122,7 @@ class Game {
       }
       case 39: {
         const newColumn = this.board.puyoColumn + 1;
-        if (newColumn > maxColumns - 1 || (newColumn > maxColumns - 2 && this.board.puyo.pairDirection === 'right') || this.gameOver()) {
+        if (newColumn > maxColumns - 1 || this.board.pairColumn + 1 > maxColumns - 1 || this.gameOver()) {
           return;
         }
 
@@ -125,7 +133,6 @@ class Game {
           sideShift += 1;
         }
         const columnHeight = boardHeight - (this.board.grid[newColumn + sideShift].length + 1) * puyoHeight;
-
         if (puyoY < columnHeight) {
           this.board.puyo.movePuyoSide(puyoWidth, boardWidth, 'pair-moving');
           this.board.changePuyoColumn(newColumn);
