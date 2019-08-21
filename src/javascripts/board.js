@@ -6,7 +6,7 @@ import { sleep } from './utils';
 const BOARD = {
   height: 770,
   width: 396,
-  interval: 3,
+  interval: 4,
 };
 
 class Board {
@@ -17,6 +17,7 @@ class Board {
     this.points = 0;
     this.level = 0;
     this.clearing = false;
+    this.cleared = true;
 
     this.allPuyos = [];
     this.grid = [];
@@ -40,6 +41,9 @@ class Board {
   }
 
   rotate(maxX, maxY) {
+    if (!this.puyo.pairMoving()) {
+      return;
+    }
     this.puyo.rotate(maxX, maxY);
 
     if (this.puyo.pairDirection === 'right') {
@@ -88,8 +92,8 @@ class Board {
       puyosMoved.push(puyo.movePuyoDown(BOARD.interval + speedIncrease, maxHeight));
     });
 
-    if (puyosMoved.every((moved) => moved === false)) {
-      this.clearing = false;
+    if (!this.clearing && puyosMoved.every((moved) => moved === false)) {
+      this.cleared = true;
     }
 
     const mainMoving = this.puyo.mainMoving();
@@ -109,7 +113,7 @@ class Board {
       this.eachPuyo((puyo) => this.checkForClear(puyo));
     }
 
-    if (!this.clearing && !moving) {
+    if (this.cleared && !moving) {
       this.dropPuyo();
     }
   }
@@ -138,6 +142,7 @@ class Board {
 
     if (connectedPuyos.length >= 4) {
       this.clearing = true;
+      this.cleared = false;
       this.points += connectedPuyos.length * 100;
       connectedPuyos.forEach((puyo) => this.setClearing(puyo));
 
@@ -148,6 +153,8 @@ class Board {
           puyo.puyo.dataset.row = i;
         });
       });
+
+      await this.setCleared();
       return true;
     }
 
@@ -165,6 +172,10 @@ class Board {
 
     const bgPosition = this.puyo.mainPuyo.getPuyoSprite(color, 'Clearing');
     puyo.puyo.style.backgroundPosition = bgPosition;
+  }
+
+  setCleared() {
+    this.clearing = false;
   }
 
   clearPuyo(puyo) {

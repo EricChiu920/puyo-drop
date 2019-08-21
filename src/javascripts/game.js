@@ -160,7 +160,7 @@ class Game {
             if (this.board.pairColumn === 0) {
               return;
             }
-            const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn].length + 2) * puyoHeight;
+            const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn - 1].length + 1) * puyoHeight;
             if (puyoY > columnHeight) {
               return;
             }
