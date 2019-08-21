@@ -84,6 +84,7 @@ class Game {
     const boardHeight = this.board.getHeight();
     const puyoHeight = this.board.puyo.mainPuyo.getPuyoHeight();
     const maxColumns = this.board.grid.length;
+    const puyoY = this.board.puyo.getPuyoY();
 
     switch (e.which) {
       case 32: {
@@ -96,14 +97,6 @@ class Game {
           return;
         }
 
-        const puyoY = this.board.puyo.getPuyoY();
-
-        // if (this.board.puyo.pairDirection === 'right') {
-        //   const secondColumnHeight = boardHeight - (this.board.grid[newColumn - 1].length + 1) * puyoHeight;
-        //   if (puyoY < secondColumnHeight) {
-        //     return;
-        //   }
-        // }
 
         const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
         let pairCanMove = true;
@@ -126,8 +119,6 @@ class Game {
           return;
         }
 
-        const puyoY = this.board.puyo.getPuyoY();
-
         let sideShift = 0;
         if (this.board.puyo.pairDirection === 'right' && this.board.puyo.pairMoving()) {
           sideShift += 1;
@@ -141,6 +132,36 @@ class Game {
       }
       case 80: {
         this.pause();
+        break;
+      }
+      case 82: {
+        if ((this.board.puyo.pairDirection === 'down' && this.board.pairColumn === 0)
+        || (this.board.puyo.pairDirection === 'up' && this.board.pairColumn === maxColumns - 1)) {
+          return;
+        }
+
+        if (this.board.puyo.pairDirection === 'right') {
+          const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn].length + 2) * puyoHeight;
+          if (puyoY > columnHeight) {
+            return;
+          }
+        }
+
+        if (this.board.puyo.pairDirection === 'down') {
+          const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn].length + 2) * puyoHeight;
+          if (puyoY > columnHeight) {
+            return;
+          }
+        }
+
+        if (this.board.puyo.pairDirection === 'up') {
+          const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn + 1].length + 2) * puyoHeight;
+          if (puyoY > columnHeight) {
+            return;
+          }
+        }
+
+        this.board.rotate(boardWidth, boardHeight);
         break;
       }
       default:

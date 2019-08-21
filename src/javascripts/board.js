@@ -6,7 +6,7 @@ import { sleep } from './utils';
 const BOARD = {
   height: 770,
   width: 396,
-  interval: 7,
+  interval: 3,
 };
 
 class Board {
@@ -36,6 +36,18 @@ class Board {
     if (this.puyo.mainPuyo.puyo.id !== '') {
       this.puyoColumn = newColumn;
       this.puyo.mainPuyo.puyo.dataset.column = this.puyoColumn;
+    }
+  }
+
+  rotate(maxX, maxY) {
+    this.puyo.rotate(maxX, maxY);
+    
+    if (this.puyo.pairDirection === 'right') {
+      this.pairColumn = this.puyoColumn + 1;
+    } else if (this.puyo.pairDirection === 'left') {
+      this.pairColumn = this.puyoColumn - 1;
+    } else {
+      this.pairColumn = this.puyoColumn;
     }
   }
 
