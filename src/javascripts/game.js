@@ -135,33 +135,47 @@ class Game {
         break;
       }
       case 82: {
-        if ((this.board.puyo.pairDirection === 'down' && this.board.pairColumn === 0)
-        || (this.board.puyo.pairDirection === 'up' && this.board.pairColumn === maxColumns - 1)) {
-          return;
-        }
+        switch (this.board.puyo.pairDirection) {
+          case 'up': {
+            if (this.board.pairColumn === maxColumns - 1) {
+              return;
+            }
 
-        if (this.board.puyo.pairDirection === 'right') {
-          const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn].length + 2) * puyoHeight;
-          if (puyoY > columnHeight) {
-            return;
+            const columnHeight = boardHeight - (this.board.grid[this.board.pairColumn + 1].length + 1) * puyoHeight;
+            if (puyoY > columnHeight) {
+              return;
+            }
+            this.board.rotate(boardWidth, boardHeight);
+            break;
+          }
+          case 'right': {
+            const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn].length + 2) * puyoHeight;
+            if (puyoY > columnHeight) {
+              return;
+            }
+            this.board.rotate(boardWidth, boardHeight);
+            break;
+          }
+          case 'down': {
+            if (this.board.pairColumn === 0) {
+              return;
+            }
+            const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn].length + 2) * puyoHeight;
+            if (puyoY > columnHeight) {
+              return;
+            }
+
+            this.board.rotate(boardWidth, boardHeight);
+            break;
+          }
+          case 'left': {
+            this.board.rotate(boardWidth, boardHeight);
+            break;
+          }
+          default: {
+            break;
           }
         }
-
-        if (this.board.puyo.pairDirection === 'down') {
-          const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn].length + 2) * puyoHeight;
-          if (puyoY > columnHeight) {
-            return;
-          }
-        }
-
-        if (this.board.puyo.pairDirection === 'up') {
-          const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn + 1].length + 2) * puyoHeight;
-          if (puyoY > columnHeight) {
-            return;
-          }
-        }
-
-        this.board.rotate(boardWidth, boardHeight);
         break;
       }
       default:

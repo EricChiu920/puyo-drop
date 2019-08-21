@@ -41,7 +41,7 @@ class Board {
 
   rotate(maxX, maxY) {
     this.puyo.rotate(maxX, maxY);
-    
+
     if (this.puyo.pairDirection === 'right') {
       this.pairColumn = this.puyoColumn + 1;
     } else if (this.puyo.pairDirection === 'left') {
@@ -49,6 +49,7 @@ class Board {
     } else {
       this.pairColumn = this.puyoColumn;
     }
+    this.puyo.pairPuyo.puyo.dataset.column = this.pairColumn;
   }
 
   dropPuyo() {
