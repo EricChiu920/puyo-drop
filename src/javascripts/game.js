@@ -1,5 +1,13 @@
 import Board from './board';
 
+const CONTROLS = {
+  spacebar: 32,
+  left: 37,
+  right: 39,
+  keyP: 80,
+  keyR: 82,
+};
+
 const GAME = {
   levelIncreaseTime: 30000,
 };
@@ -79,6 +87,10 @@ class Game {
   }
 
   controlScheme(e) {
+    if (this.paused && (e.which !== CONTROLS.keyP && e.which !== CONTROLS.spacebar)) {
+      return;
+    }
+
     const puyoWidth = this.board.puyo.mainPuyo.getPuyoWidth();
     const boardWidth = this.board.getWidth();
     const boardHeight = this.board.getHeight();
@@ -87,21 +99,21 @@ class Game {
     const puyoY = this.board.puyo.getPuyoY();
 
     switch (e.which) {
-      case 32: {
+      case CONTROLS.spacebar: {
         this.resume();
         break;
       }
-      case 37: {
+      case CONTROLS.left: {
         const newColumn = this.board.puyoColumn - 1;
         if (newColumn < 0 || (newColumn === 0 && this.board.puyo.pairDirection === 'left') || this.gameOver()) {
           return;
         }
 
-
         const columnHeight = boardHeight - (this.board.grid[newColumn].length + 1) * puyoHeight;
         let pairCanMove = true;
         const pairNewColumn = this.board.pairColumn - 1;
-        const pairColumnHeight = boardHeight - (this.board.grid[pairNewColumn].length + 1) * puyoHeight;
+        const columnLength = this.board.grid[pairNewColumn].length + 1;
+        const pairColumnHeight = boardHeight - columnLength * puyoHeight;
         pairCanMove = puyoY < pairColumnHeight;
 
         if (puyoY < columnHeight && pairCanMove) {
@@ -113,9 +125,11 @@ class Game {
         }
         break;
       }
-      case 39: {
+      case CONTROLS.right: {
         const newColumn = this.board.puyoColumn + 1;
-        if (newColumn > maxColumns - 1 || this.board.pairColumn + 1 > maxColumns - 1 || this.gameOver()) {
+        if (newColumn > maxColumns - 1
+          || this.board.pairColumn + 1 > maxColumns - 1
+          || this.gameOver()) {
           return;
         }
 
@@ -123,25 +137,27 @@ class Game {
         if (this.board.puyo.pairDirection === 'right' && this.board.puyo.pairMoving()) {
           sideShift += 1;
         }
-        const columnHeight = boardHeight - (this.board.grid[newColumn + sideShift].length + 1) * puyoHeight;
+        const columnLength = this.board.grid[newColumn + sideShift].length + 1;
+        const columnHeight = boardHeight - columnLength * puyoHeight;
         if (puyoY < columnHeight) {
           this.board.puyo.movePuyoSide(puyoWidth, boardWidth, 'pair-moving');
           this.board.changePuyoColumn(newColumn);
         }
         break;
       }
-      case 80: {
+      case CONTROLS.keyP: {
         this.pause();
         break;
       }
-      case 82: {
+      case CONTROLS.keyR: {
         switch (this.board.puyo.pairDirection) {
           case 'up': {
             if (this.board.pairColumn === maxColumns - 1) {
               return;
             }
 
-            const columnHeight = boardHeight - (this.board.grid[this.board.pairColumn + 1].length + 1) * puyoHeight;
+            const columnLength = this.board.grid[this.board.pairColumn + 1].length + 1;
+            const columnHeight = boardHeight - columnLength * puyoHeight;
             if (puyoY > columnHeight) {
               return;
             }
@@ -149,7 +165,8 @@ class Game {
             break;
           }
           case 'right': {
-            const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn].length + 2) * puyoHeight;
+            const columnLength = this.board.grid[this.board.puyoColumn].length + 2;
+            const columnHeight = boardHeight - columnLength * puyoHeight;
             if (puyoY > columnHeight) {
               return;
             }
@@ -160,7 +177,8 @@ class Game {
             if (this.board.pairColumn === 0) {
               return;
             }
-            const columnHeight = boardHeight - (this.board.grid[this.board.puyoColumn - 1].length + 1) * puyoHeight;
+            const columnLength = this.board.grid[this.board.puyoColumn - 1].length + 1;
+            const columnHeight = boardHeight - columnLength * puyoHeight;
             if (puyoY > columnHeight) {
               return;
             }

@@ -1,7 +1,8 @@
 .puyo-drop {
   min-height: 770px;
   min-width: 396px;
-  background-color: skyblue;
+  background-color: rgba(135, 206, 235, 0.95);
+  border: 5px solid rgb(47, 152, 244);
   display: flex;
   position: relative;
 }
@@ -9,4 +10,42 @@
 .grid-box {
   height: 64px;
   width: 66px;
+}
+
+.controls {
+  margin-right: 10px;
+  width: 300px;
+  padding: 20px;
+  background-color: rgba(33, 58, 44, 0.97);
+  display: flex;
+  flex-direction: column;
+  color: white;
+
+  div {
+    &:first-child {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.game-stats {
+  margin-left: 10px;
+  padding: 20px;
+  background-color: rgba(33, 58, 44, 0.97);
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  color: white;
+
+  &> div {
+    display: flex;
+
+    &:first-child {
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-left: 5px;
+    }
+  }
 }
