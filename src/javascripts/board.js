@@ -150,7 +150,8 @@ class Board {
     if (connectedPuyos.length >= 4) {
       this.clearing = true;
       this.cleared = false;
-      this.points += connectedPuyos.length * 100;
+      const multiplier = this.hardMode ? 2 : 1;
+      this.points += connectedPuyos.length * 100 * multiplier;
       connectedPuyos.forEach((puyo) => this.setClearing(puyo));
 
       await sleep(100);
