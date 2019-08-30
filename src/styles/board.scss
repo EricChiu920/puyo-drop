@@ -73,3 +73,13 @@
   align-items: center;
   font-size: 40px;
 }
+
+.high-scores {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+
+  h6 {
+    margin-bottom: 10px;
+  }
+}

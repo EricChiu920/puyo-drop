@@ -103,7 +103,7 @@ class Game {
   }
 
   drawHighScores() {
-    const highScoresUl = document.querySelector('.high-scores');
+    const highScoresUl = document.querySelector('.high-score-list');
 
     while (highScoresUl.lastChild) {
       highScoresUl.lastChild.remove();
