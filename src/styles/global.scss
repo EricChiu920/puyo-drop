@@ -4,10 +4,11 @@
 }
 
 body {
-  background-image: url(https://files.gamebanana.com/img/ss/srends/5bf0a388b67da.jpg);
+  background-image: url('../../assets/puyo-background.jpg');
   background-size: cover;
   font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.1em;
+  line-height: 1.15em;
+  transform: translateX(-8%);
 }
 
 .main-container {
