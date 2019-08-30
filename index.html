@@ -10,25 +10,31 @@
 </head>
 <body>
   <div class="main-container">
-    <div class="controls">
-      <div>
-        <h4>Controls</h4>
-        <p>Left and Right arrow keys to move</p>
-        <p>R to rotate</p>
-        <p>P to pause</p>
-        <p>Spacebar to resume</p>
+    <div>
+      <div class="controls">
+        <div>
+          <h4>Controls</h4>
+          <p>Left and Right arrow keys to move</p>
+          <p>R to rotate</p>
+          <p>P to pause</p>
+          <p>Spacebar to resume</p>
+        </div>
+        <div>
+          <p>Get 4 or more of the same color in adjacent positions to have them clear</p>
+          <p>Get the highest points you can!</p>
+        </div>
+        <div>
+          <p>Hard Mode makes the puyo's turn invisible when they finish falling</p>
+        </div>
       </div>
-      <div>
-        <p>Get 4 or more of the same color in adjacent positions to have them clear</p>
-        <p>Get the highest points you can!</p>
-      </div>
-    </div>
-    <div class="game-container">
-      <div class="puyo-drop"></div>
       <div class="buttons">
         <button class="play-button">Play</button>
         <button class="hard-mode">Hard Mode</button>
       </div>
+    </div>
+    <div class="game-container">
+      <div class="puyo-drop"></div>
+      <div class="game-over-modal">Game Over</div>
     </div>
     <div  class="game-stats">
       <div>

@@ -23,6 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setDifficulty() {
     hardMode = !hardMode;
+
+    if (hardMode) {
+      hardModeButton.style.backgroundColor = "#bd2121e5";
+      hardModeButton.style.color = "white";
+    } else {
+      hardModeButton.style.backgroundColor = "white";
+      hardModeButton.style.color = "black";
+    }
   }
 
   hardModeButton.addEventListener('click', setDifficulty);

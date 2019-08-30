@@ -6,6 +6,8 @@
 body {
   background-image: url(https://files.gamebanana.com/img/ss/srends/5bf0a388b67da.jpg);
   background-size: cover;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.1em;
 }
 
 .main-container {
@@ -15,6 +17,7 @@ body {
 }
 
 .game-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;

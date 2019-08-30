@@ -25,9 +25,7 @@
   color: white;
 
   div {
-    &:first-child {
-      margin-bottom: 10px;
-    }
+    margin-bottom: 15px;
   }
 }
 
@@ -51,4 +49,27 @@
       margin-left: 5px;
     }
   }
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+
+  button {
+    margin-right: 15px;
+    border-radius: 5px;
+    border: none;
+  }
+}
+
+.game-over-modal {
+  background-color: rgba(0, 0, 0, 0.7);
+  min-height: 780px;
+  width: 100%;
+  color: white;
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
 }
