@@ -10,7 +10,7 @@ const CONTROLS = {
 };
 
 const GAME = {
-  levelIncreaseTime: 30000,
+  levelIncreaseTime: 25000,
 };
 
 class Game {
@@ -55,8 +55,17 @@ class Game {
       clearInterval(this.increaseLevelId);
       let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 
-      highScores.push(this.board.points);
-      highScores = highScores.sort((a, b) => b - a);
+      const lastPoints = highScores[highScores.length - 1] || -1;
+
+      if (this.board.points < lastPoints) {
+        this.gameOverModal.style.display = 'flex';
+        return;
+      }
+
+      // eslint-disable-next-line no-alert
+      const name = prompt('New high score!, please enter your name.');
+      highScores.push([this.board.points, `: ${name.substring(0, 20)}`]);
+      highScores = highScores.sort((a, b) => b[0] - a[0]);
 
       while (highScores.length > 5) {
         highScores.pop();
@@ -113,7 +122,15 @@ class Game {
 
     for (let i = 0; i < highScores.length; i += 1) {
       const li = document.createElement('li');
-      li.textContent = highScores[i];
+      li.textContent = String(highScores[i]).replace(/,:/, '');
+
+      if (i === 0) {
+        li.style.color = 'gold';
+      } else if (i === 1) {
+        li.style.color = 'silver';
+      } else if (i === 2) {
+        li.style.color = 'brown';
+      }
       highScoresUl.appendChild(li);
     }
   }

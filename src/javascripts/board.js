@@ -6,7 +6,7 @@ import { sleep } from './utils';
 const BOARD = {
   height: 770,
   width: 396,
-  interval: 7.5,
+  interval: 4,
 };
 
 class Board {
