@@ -1,9 +1,5 @@
 import Puyo from './puyo';
 
-const ROTATION = {
-
-};
-
 class PairPuyos {
   constructor() {
     this.mainPuyo = new Puyo();

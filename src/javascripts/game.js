@@ -53,6 +53,18 @@ class Game {
       this.rafId = requestAnimationFrame(this.animate);
     } else {
       clearInterval(this.increaseLevelId);
+      let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+      highScores.push(this.board.points);
+      highScores = highScores.sort((a, b) => b - a);
+
+      while (highScores.length > 5) {
+        highScores.pop();
+      }
+
+      localStorage.setItem('highScores', JSON.stringify(highScores));
+
+      this.drawHighScores();
       this.gameOverModal.style.display = 'flex';
     }
   }
@@ -88,6 +100,22 @@ class Game {
 
   addControls() {
     document.addEventListener('keydown', this.controlScheme);
+  }
+
+  drawHighScores() {
+    const highScoresUl = document.querySelector('.high-scores');
+
+    while (highScoresUl.lastChild) {
+      highScoresUl.lastChild.remove();
+    }
+
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    for (let i = 0; i < highScores.length; i += 1) {
+      const li = document.createElement('li');
+      li.textContent = highScores[i];
+      highScoresUl.appendChild(li);
+    }
   }
 
   movePuyoLeft(boardHeight, boardWidth, puyoHeight, puyoY, puyoWidth) {

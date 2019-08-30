@@ -6,7 +6,7 @@ import { sleep } from './utils';
 const BOARD = {
   height: 770,
   width: 396,
-  interval: 4.5,
+  interval: 7.5,
 };
 
 class Board {
@@ -18,6 +18,12 @@ class Board {
     this.level = 0;
     this.clearing = false;
     this.cleared = true;
+    this.queue = [new PairPuyos(), new PairPuyos(), new PairPuyos()];
+
+    // for (let i = 1; i < this.queue.length; i += 1) {
+    //   debugger
+    //   this.queue[i].createPuyo();
+    // }
 
     this.allPuyos = [];
     this.grid = [];
@@ -57,7 +63,8 @@ class Board {
   }
 
   dropPuyo() {
-    this.puyo = new PairPuyos();
+    this.puyo = this.queue.shift();
+    this.queue.push(new PairPuyos());
     this.newPuyo = this.puyo.createPuyo();
     this.allPuyos.push(this.puyo.mainPuyo);
     this.allPuyos.push(this.puyo.pairPuyo);

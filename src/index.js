@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let hardMode = false;
 
   const game = new Game(container);
+
   function playGame() {
     return () => {
       while (container.lastChild) {
@@ -25,14 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
     hardMode = !hardMode;
 
     if (hardMode) {
-      hardModeButton.style.backgroundColor = "#bd2121e5";
-      hardModeButton.style.color = "white";
+      hardModeButton.style.backgroundColor = '#bd2121e5';
+      hardModeButton.style.color = 'white';
     } else {
-      hardModeButton.style.backgroundColor = "white";
-      hardModeButton.style.color = "black";
+      hardModeButton.style.backgroundColor = 'white';
+      hardModeButton.style.color = 'black';
     }
   }
 
+  game.drawHighScores();
   hardModeButton.addEventListener('click', setDifficulty);
   playButton.addEventListener('click', playGame(game));
 });
