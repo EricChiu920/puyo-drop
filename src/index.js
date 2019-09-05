@@ -7,34 +7,41 @@ import Game from './javascripts/game';
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('.puyo-drop');
-  const playButton = document.querySelector('.play-button');
-  const hardModeButton = document.querySelector('.hard-mode');
+  const playButtons = document.querySelectorAll('.play-button');
+  const hardModeButtons = document.querySelectorAll('.hard-mode');
   let hardMode = false;
 
   const game = new Game(container);
 
-  function playGame() {
+  function playGame(playButton) {
     return () => {
       while (container.lastChild) {
         container.lastChild.remove();
       }
+
+      const startModal = document.querySelector('.start-modal');
+      startModal.style.display = 'none';
       game.play(hardMode);
+      playButton.blur();
     };
   }
 
-  function setDifficulty() {
-    hardMode = !hardMode;
+  function setDifficulty(hardModeButton) {
+    return () => {
+      hardMode = !hardMode;
 
-    if (hardMode) {
-      hardModeButton.style.backgroundColor = '#bd2121e5';
-      hardModeButton.style.color = 'white';
-    } else {
-      hardModeButton.style.backgroundColor = 'white';
-      hardModeButton.style.color = 'black';
+      if (hardMode) {
+        hardModeButton.style.backgroundColor = '#bd2121e5';
+        hardModeButton.style.color = 'white';
+      } else {
+        hardModeButton.style.backgroundColor = 'white';
+        hardModeButton.style.color = 'black';
+      }
+      hardModeButton.blur();
     }
   }
 
   game.drawHighScores();
-  hardModeButton.addEventListener('click', setDifficulty);
-  playButton.addEventListener('click', playGame(game));
+  hardModeButtons.forEach((hardmodeButton) => hardmodeButton.addEventListener('click', setDifficulty(hardmodeButton).bind(this)));
+  playButtons.forEach((playButton) => playButton.addEventListener('click', playGame(game).bind(this)));
 });

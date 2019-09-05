@@ -63,9 +63,9 @@ class Game {
       }
 
       // eslint-disable-next-line no-alert
-      const name = prompt('New high score!, please enter your name.');
+      let name = prompt('Please enter your name.');
       if (name === null) {
-        return;
+        name = 'Anonymous';
       }
 
       highScores.push([this.board.points, `: ${name.substring(0, 20)}`]);
@@ -260,7 +260,7 @@ class Game {
   }
 
   controlScheme(e) {
-    if (this.paused && e.which !== CONTROLS.keyP) {
+    if ((this.paused && e.which !== CONTROLS.keyP) || this.gameOver()) {
       return;
     }
 
@@ -273,8 +273,14 @@ class Game {
 
     switch (e.which) {
       case CONTROLS.spacebar: {
-        // this.resume();
-
+        if (this.board.puyo.pairDirection === 'down') {
+          this.board.puyo.mainPuyo.movePuyoDown(boardHeight, boardHeight);
+          this.board.settlePuyo(this.board.puyo.pairPuyo, this.board.pairColumn);
+          this.board.puyo.pairPuyo.movePuyoDown(boardHeight, boardHeight);
+        } else {
+          this.board.puyo.mainPuyo.movePuyoDown(boardHeight, boardHeight);
+          this.board.puyo.pairPuyo.movePuyoDown(boardHeight, boardHeight);
+        }
         break;
       }
       case CONTROLS.left: {

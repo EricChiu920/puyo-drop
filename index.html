@@ -9,23 +9,32 @@
   <title>Puyo Drop</title>
 </head>
 <body>
+  <div class="start-modal">
+    <h1>Puyo Drop</h1>
+    <div class="buttons">
+      <button class="play-button">Play</button>
+      <button class="hard-mode">Hard Mode</button>
+    </div>
+  </div>
   <div class="main-container">
     <div>
       <div class="controls">
         <div>
           <h4>Controls</h4>
-          <p>Left and Right arrow keys to move</p>
-          <p>R or Up arrow key to rotate</p>
-          <p>P to pause</p>
-          <p>Spacebar to resume</p>
-          <p>Click play to start playing or restart.</p>
+          <ul>
+            <li>Left and Right arrow keys to move</li>
+            <li>R or Up arrow key to rotate</li>
+            <li>P to pause and unpause</li>
+            <li>Spacebar to instant drop</li>
+            <li>Click play to start playing or restart.</li>
+          </ul>
         </div>
         <div>
           <p>Get 4 or more of the same color in adjacent positions to have them clear</p>
           <p>Get the highest points you can!</p>
         </div>
         <div>
-          <p>Hard Mode makes the puyo's turn invisible when they finish falling</p>
+          <em>Hard Mode makes the puyo's turn invisible when they finish falling</em>
         </div>
       </div>
       <div class="buttons">
@@ -35,7 +44,13 @@
     </div>
     <div class="game-container">
       <div class="puyo-drop"></div>
-      <div class="game-over-modal">Game Over</div>
+      <div class="game-over-modal">
+        <h1>Game Over</h1>
+        <div class="buttons">
+          <button class="play-button">Play</button>
+          <button class="hard-mode">Hard Mode</button>
+        </div>
+      </div>
     </div>
     <div class="game-stats">
       <div>
