@@ -28,8 +28,8 @@ class Puyo {
     // puyo.style.top = `-${PUYO.height}px`;
     this.puyo = puyo;
     this.landed = false;
-    this.currentY = Number(puyo.style.transform.split(',')[1].match(/\d+/)[0]);
-    this.currentX = Number(puyo.style.transform.split(',')[0].match(/\d+/)[0]);
+    this.currentY = Number(puyo.style.transform.split(',')[1]?.match(/\d+/)[0] ?? 0);
+    this.currentX = Number(puyo.style.transform.split(',')[0]?.match(/\d+/)[0] ?? 0);
     return puyo;
   }
 

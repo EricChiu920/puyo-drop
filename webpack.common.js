@@ -18,7 +18,7 @@ module.exports = {
         test: /\.js$/, // if we were using React.js, we would use \.jsx?$/
         use: {
           loader: "babel-loader",
-          options: { presets: ["env"] } // if we were using React.js, we would include "react"
+          options: { presets: ["@babel/preset-env"] } // if we were using React.js, we would include "react"
         }
       },
       {
